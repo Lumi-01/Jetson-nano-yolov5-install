@@ -18,6 +18,8 @@ source - https://github.com/Qengineering/Install-OpenCV-Jetson-Nano
 
 You can install the latest version of your choice. However, Please exclude 4.10.0 as an error will occur during installation.
 
+please set the memory swap to 8gb
+
 ```
 #open terminal
 $ wget https://github.com/Qengineering/Install-OpenCV-Jetson-Nano/raw/main/OpenCV-4-11-0.sh
@@ -55,8 +57,8 @@ https://github.com/Lumi-01/Jetson-nano-yolov5-install/blob/main/jetson_nano_yolo
 
 
 # How to Install #
-$ wget Any link you want
-$ sudo chmod 755 ./File name.extension
+$ wget https://github.com/Lumi-01/Jetson-nano-yolov5-install/blob/main/jetson_nano_yolov5_lnstall.sh
+$ sudo chmod 755 ./jetson_nano_yolov5_lnstall.sh
 $ ./File name.extension
 ```
 
