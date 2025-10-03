@@ -63,6 +63,6 @@ https://raw.githubusercontent.com/Lumi-01/Jetson-nano-yolov5-install/refs/heads/
 # How to Install #
 $ wget https://raw.githubusercontent.com/Lumi-01/Jetson-nano-yolov5-install/refs/heads/main/jetson_nano_yolov5_lnstall.sh
 $ sudo chmod 755 ./jetson_nano_yolov5_lnstall.sh
-$ ./File jetson_nano_yolov5_lnstall.sh
+$ ./jetson_nano_yolov5_lnstall.sh
 ```
 
