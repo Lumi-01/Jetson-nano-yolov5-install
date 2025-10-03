@@ -60,4 +60,8 @@ Pillow>=7.1.2
 torch>=1.7.
 torchvision>=0.8.1
 --------------------------------------------------------------------------------------------------------------------
+pip install -r requirements.txt
 
+python detect.py --weights yolov5s.pt --source data/images/bus.jpg
+
+python detect.py --weights yolov5s.pt --source 0
