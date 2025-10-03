@@ -1,55 +1,59 @@
 #open terminal
 
 # Create virtualenv - Specify Python 3.6 version and use system site packages
->> python3 -m virtualenv yolov5-py36 --python=python3.6 --system-site-packages
+$ python3 -m virtualenv yolov5-py36 --python=python3.6 --system-site-packages
 
 # Activate virtual environment
->> source yolov5-py36/bin/activate
+$ source yolov5-py36/bin/activate
 
 # Check OpenCV operation
->> 
->> 
+$ python3 
+>> import opencv
 >> cv2.__version__
+# The installed version is displayed
 >> exit()
 
 # Upgrade pip and build tools to the latest version
->> pip3 install --upgrade pip setuptools wheel
+$ pip3 install --upgrade pip setuptools wheel
 
 # Install Cython and numpy
->> pip3 install 'Cython<3.0'
->> pip3 install numpy==1.19.2
+$ pip3 install 'Cython<3.0'
+$ pip3 install numpy==1.19.2
 
 # Download and Install PyTorch v1.10.0 for Python 3.6
 # https://forums.developer.nvidia.com/t/pytorch-for-jetson/72048
 # This .whl file is specifically pre-built for Jetson devices (aarch64 architecture).
->> wget https://nvidia.box.com/shared/static/fjtbno0vpo676a25cgvuqc1wty0fkkg6.whl -O torch-1.10.0-cp36-cp36m-linux_aarch64.whl
->> pip3 install numpy torch-1.10.0-cp36-cp36m-linux_aarch64.whl
+$ wget https://nvidia.box.com/shared/static/fjtbno0vpo676a25cgvuqc1wty0fkkg6.whl -O torch-1.10.0-cp36-cp36m-linux_aarch64.whl
+$ pip3 install numpy torch-1.10.0-cp36-cp36m-linux_aarch64.whl
 
 # Install system dependencies required for building torchvision (e.g., JPEG and ZLib support).
->> sudo apt-get install -y libjpeg-dev zlib1g-dev
+$ sudo apt-get install -y libjpeg-dev zlib1g-dev
 
 # This resolves "SyntaxError: invalid syntax" or "No matching distribution found" issues with newer versions.
->> pip install Pillow==8.4.0
+$ pip install Pillow==8.4.0
 
 # Clone >the specific v0.11.1 branch of the torchvision repository from GitHub.
 # The files are placed in a new directory named 'torchvision_v0.11.1' in the home folder (~).
->> git clone --branch v0.11.1 https://github.com/pytorch/vision ~/torchvision_v0.11.1
+$ git clone --branch v0.11.1 https://github.com/pytorch/vision ~/torchvision_v0.11.1
 
 # Navigate into the newly created torchvision directory.
->> cd ~/torchvision_v0.11.1
+$ cd ~/torchvision_v0.11.1
 
 # Set the environment variable to ensure the correct version number (0.11.1) is used during the build process.
->> export BUILD_VERSION=0.11.1
+$ export BUILD_VERSION=0.11.1
 
 # Compile and install torchvision from the source code.
 # WARNING: This process takes significant time (often 30+ minutes) on Jetson Nano devices.
->> python3 setup.py install
+$ python3 setup.py install
 
 # Return to the user's home directory for the next steps.
->> cd ~
+$ cd ~
 
-git clone https://github.com/ultralytics/yolov5 ~/yolov5
-cd ~/yolov5
+# Clone the official YOLOv5 repository from Ultralytics' GitHub.
+$ git clone https://github.com/ultralytics/yolov5 ~/yolov5
+$ cd ~/yolov5
+
+# This is the last version that officially supports Python 3.6.
 git reset --hard 9bcc32a
 
 --------------------------------------------------------------------------------------------------------------------
@@ -62,8 +66,16 @@ Pillow>=7.1.2
 torch>=1.7.
 torchvision>=0.8.1
 --------------------------------------------------------------------------------------------------------------------
-pip install -r requirements.txt
 
-python detect.py --weights yolov5s.pt --source data/images/bus.jpg
+$ pip install -r requirements.txt
 
-python detect.py --weights yolov5s.pt --source 0
+##test##
+
+$ source yolov5-py36/bin/activate
+$ cd ~/yolov5
+
+#Camera test
+$ python detect.py --weights yolov5s.pt --source data/images/bus.jpg
+
+#image test
+$ python detect.py --weights yolov5s.pt --source 0
