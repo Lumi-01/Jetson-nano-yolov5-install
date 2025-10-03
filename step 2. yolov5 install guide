@@ -8,7 +8,7 @@ $ source yolov5-py36/bin/activate
 
 # Check OpenCV operation
 $ python3 
->> import opencv
+>> import cv2
 >> cv2.__version__
 # The installed version is displayed
 >> exit()
