@@ -65,5 +65,10 @@ https://github.com/Lumi-01/Jetson-nano-yolov5-and-yolov8-install/blob/main/jetso
 
 step 3. yolov8 install guide
 (Writing..)
+
+# How to Install #
+$ wget Any link you want
+$ sudo chmod 755 ./File name.extension
+$ ./File name.extension
 ```
 
