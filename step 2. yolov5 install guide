@@ -1,10 +1,10 @@
 #open terminal
 
 # Create virtualenv - Specify Python 3.6 version and use system site packages
->> python3 -m virtualenv yolov5-cp36 --python=python3.6 --system-site-packages
+>> python3 -m virtualenv yolov5-py36 --python=python3.6 --system-site-packages
 
 # Activate virtual environment
->> source yolov5-cp36/bin/activate
+>> source yolov5-py36/bin/activate
 
 # Check OpenCV operation
 >> python3
@@ -46,4 +46,18 @@
 
 # Return to the user's home directory for the next steps.
 >> cd ~
+
+git clone https://github.com/ultralytics/yolov5 ~/yolov5
+git checkout v6.2
+
+--------------------------------------------------------------------------------------------------------------------
+#Disable package dependencies in requirements.txt to use existing system-installed libraries (e.g., on Jetson Nano).
+#The following lines are commented out:
+
+numpy>=1.18.
+opencv-python>=4.1.1
+Pillow>=7.1.2
+torch>=1.7.
+torchvision>=0.8.1
+--------------------------------------------------------------------------------------------------------------------
 
