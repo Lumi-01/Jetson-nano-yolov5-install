@@ -24,7 +24,7 @@ $ sudo apt-get install -y libjpeg-dev zlib1g-dev
 
 # Clone >the specific v0.12.0 branch of the torchvision repository from GitHub.
 # The files are placed in a new directory named 'torchvision_v0.12.0' in the home folder (~).
-$ git clone --branch v0.12.0 https://github.com/pytorch/vision ~/torchvision_v0.11.1
+$ git clone --branch v0.12.0 https://github.com/pytorch/vision ~/torchvision_v0.12.0
 
 # Navigate into the newly created torchvision directory.
 $ cd ~/torchvision_v0.12.0
