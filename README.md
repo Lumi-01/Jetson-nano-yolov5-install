@@ -36,6 +36,8 @@ $ source ~/.bashrc
 
 ---------------------------------------------------------------------------------------------------------------------------------
 
+Now, you can proceed with the installation according to the steps below "Must".
+
 ```
 step 1. virtualenv and python 3.8 install guide
 https://github.com/Lumi-01/Jetson-nano-yolov5-and-yolov8-install/blob/main/step%201.%20virtualenv%20and%20python%203.8%20install
