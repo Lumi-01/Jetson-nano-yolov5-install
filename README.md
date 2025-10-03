@@ -57,11 +57,11 @@ sh flie (!! Not tested, Operation not guaranteed !!)
 
 ```
 1. yolov5 install guide
-https://github.com/Lumi-01/Jetson-nano-yolov5-install/blob/main/jetson_nano_yolov5_lnstall.sh
+https://raw.githubusercontent.com/Lumi-01/Jetson-nano-yolov5-install/refs/heads/main/jetson_nano_yolov5_lnstall.sh
 
 
 # How to Install #
-$ wget https://github.com/Lumi-01/Jetson-nano-yolov5-install/blob/main/jetson_nano_yolov5_lnstall.sh
+$ wget https://raw.githubusercontent.com/Lumi-01/Jetson-nano-yolov5-install/refs/heads/main/jetson_nano_yolov5_lnstall.sh
 $ sudo chmod 755 ./jetson_nano_yolov5_lnstall.sh
 $ ./File jetson_nano_yolov5_lnstall.sh
 ```
