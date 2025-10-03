@@ -3,7 +3,7 @@
 
 Hello!
 
-This GitHub is for installing Python YOLO 5 on Jetson Nano.
+This GitHub is for installing Python YOLOv5 on Jetson Nano.
 
 Just follow the steps
 
