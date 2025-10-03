@@ -49,7 +49,7 @@
 
 git clone https://github.com/ultralytics/yolov5 ~/yolov5
 cd ~/yolov5
-git checkout v6.2
+git reset --hard 9bcc32a
 
 --------------------------------------------------------------------------------------------------------------------
 #Disable package dependencies in requirements.txt to use existing system-installed libraries (e.g., on Jetson Nano).
