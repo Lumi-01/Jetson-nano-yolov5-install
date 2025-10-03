@@ -74,8 +74,8 @@ $ pip install -r requirements.txt
 $ source yolov5-py36/bin/activate
 $ cd ~/yolov5
 
-#Camera test
+#Image test
 $ python detect.py --weights yolov5s.pt --source data/images/bus.jpg
 
-#image test
+#Camera test
 $ python detect.py --weights yolov5s.pt --source 0
