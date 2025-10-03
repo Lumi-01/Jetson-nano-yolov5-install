@@ -26,6 +26,7 @@ $ wget https://github.com/Qengineering/Install-OpenCV-Jetson-Nano/raw/main/OpenC
 
 #Version made all cores work regardless of memory swap
 $ wget https://github.com/Lumi-01/Jetson-nano-yolov5-install/blob/main/OpenCV-4.11.0.sh
+
 $ sudo chmod 755 ./OpenCV-4-11-0.sh.
 $ ./OpenCV-4-11-0.sh
 ```
