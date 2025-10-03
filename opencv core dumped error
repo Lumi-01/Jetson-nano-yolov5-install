@@ -1,4 +1,5 @@
 # open terminal
 $ gedit ~/.bashrc
+#add to last line
 $ export OPENBLAS_CORETYPE=ARMV8 python3
 $ source ~/.bashrc
