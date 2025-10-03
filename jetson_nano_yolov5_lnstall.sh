@@ -53,7 +53,7 @@ echo "[5/6] Cloning YOLOv5 and checking out a Python 3.6 compatible version..."
 git clone https://github.com/ultralytics/yolov5 ~/yolov5
 cd ~/yolov5
 # This commit is the last version to officially support Python 3.6.
-git reset --hard 9bcc32a0335265a25c1477d54406a6c2f328f644
+git reset --hard 9bcc32a
 
 # --- 6. Install YOLOv5 Dependencies ---
 echo "[6/6] Modifying requirements.txt and installing dependencies..."
