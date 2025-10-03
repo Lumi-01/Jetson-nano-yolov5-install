@@ -22,10 +22,10 @@ step 3. yolov8 install guide
 sh flie (!! Not tested, Operation not guaranteed !!)
 
 step 1. virtualenv and python 3.8 install
-https://github.com/Lumi-01/Jetson-nano-yolov5-and-yolov8-install/blob/main/jetson_nano_yolo5_lnstall.sh
+(Writing..)
 
 step 2. yolov5 install guide
-(Writing..)
+https://github.com/Lumi-01/Jetson-nano-yolov5-and-yolov8-install/blob/main/jetson_nano_yolo5_lnstall.sh
 
 step 3. yolov8 install guide
 (Writing..)
