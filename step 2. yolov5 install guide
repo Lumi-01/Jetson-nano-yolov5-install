@@ -7,9 +7,10 @@
 >> source yolov5-py36/bin/activate
 
 # Check OpenCV operation
->> python3
->> import cv2
+>> 
+>> 
 >> cv2.__version__
+>> exit()
 
 # Upgrade pip and build tools to the latest version
 >> pip3 install --upgrade pip setuptools wheel
@@ -55,7 +56,7 @@ git reset --hard 9bcc32a
 #Disable package dependencies in requirements.txt to use existing system-installed libraries (e.g., on Jetson Nano).
 #The following lines are commented out:
 
-numpy>=1.18.
+numpy>=1.18.5
 opencv-python>=4.1.1
 Pillow>=7.1.2
 torch>=1.7.
