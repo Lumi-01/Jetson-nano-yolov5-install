@@ -1,5 +1,8 @@
 #open terminal
 
+# python3-virtualenv install
+$ sudo apt install python3-virtualenv
+
 # Create virtualenv - Specify Python 3.6 version and use system site packages
 $ python3 -m virtualenv yolov5-py36 --python=python3.6 --system-site-packages
 
