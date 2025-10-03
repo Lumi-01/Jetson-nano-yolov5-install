@@ -26,6 +26,7 @@ After installation, you should do the following, because when you call the libra
 
 ```
 $ gedit ~/.bashrc
+
 # Add to the last line.
 $ export OPENBLAS_CORETYPE=ARMV8 python3
 $ source ~/.bashrc
