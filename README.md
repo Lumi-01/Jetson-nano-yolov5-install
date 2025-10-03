@@ -3,7 +3,7 @@
 
 Hello!
 
-This GitHub is for installing Python 3.8 / YOLO 5 and 8 on Jetson Nano.
+This GitHub is for installing Python YOLO 5 on Jetson Nano.
 
 Just follow the steps
 
@@ -41,14 +41,8 @@ $ source ~/.bashrc
 Now, you can proceed with the installation according to the steps below "Must".
 
 ```
-step 1. virtualenv and python 3.8 install guide
-https://github.com/Lumi-01/Jetson-nano-yolov5-and-yolov8-install/blob/main/step%201.%20virtualenv%20and%20python%203.8%20install%20guide
-
-step 2. yolov5 install guide
+1. yolov5 install guide
 https://github.com/Lumi-01/Jetson-nano-yolov5-and-yolov8-install/blob/main/step%202.%20yolov5%20install%20guide
-
-step 3. yolov8 install guide
-(Writing..)
 ```
 
 ---------------------------------------------------------------------------------------------------------------------------------
@@ -56,14 +50,9 @@ step 3. yolov8 install guide
 sh flie (!! Not tested, Operation not guaranteed !!)
 
 ```
-step 1. virtualenv and python 3.8 install
-https://github.com/Lumi-01/Jetson-nano-yolov5-and-yolov8-install/blob/main/jetson_nano_Python%203.8_and_virtualenv_lnstall.sh
-
 step 2. yolov5 install guide
 https://github.com/Lumi-01/Jetson-nano-yolov5-and-yolov8-install/blob/main/jetson_nano_yolov5_lnstall.sh
 
-step 3. yolov8 install guide
-(Writing..)
 
 # How to Install #
 $ wget Any link you want
