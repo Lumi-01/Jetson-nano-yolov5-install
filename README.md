@@ -29,6 +29,7 @@ $ gedit ~/.bashrc
 
 # Add to the last line.
 $ export OPENBLAS_CORETYPE=ARMV8 python3
+
 $ source ~/.bashrc
 ```
 
