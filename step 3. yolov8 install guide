@@ -9,6 +9,10 @@ $ source yolov8-py38/bin/activate
 # Upgrade pip and build tools to the latest version
 $ pip3 install --upgrade pip setuptools wheel
 
+# Install Cython and numpy
+$ pip3 install 'Cython<3.0'
+$ pip3 install numpy==1.19.2
+
 # Install yolov8
 pip install ultralytics==8.0.232
 yolo predict model=yolov8n.pt source=0
