@@ -8,7 +8,7 @@ sh file is being tested
 
 ---------------------------------------------------------------------------------------------------------------------------------
 
-step 1. virtualenv and python 3.8 install
+step 1. virtualenv and python 3.8 install guide
 https://github.com/Lumi-01/Jetson-nano-yolov5-and-yolov8-install/blob/main/step%201.%20virtualenv%20and%20python%203.8%20install
 
 step 2. yolov5 install guide
