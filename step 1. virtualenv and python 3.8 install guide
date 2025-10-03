@@ -1,4 +1,3 @@
-
 model : jetson nano
 firmware : jetpack 4.6.4 (Ubuntu 18.04)
 opencv : 1.11.0 ~
