@@ -1,7 +1,7 @@
 #open terminal
 
-# Create virtualenv - Specify Python 3.8
-$ python3 -m virtualenv yolov8-py38 --python=python3.8--system-site-packages
+# Create virtualenv - Specify Python 3.8 version and use system site packages
+$ python3 -m virtualenv yolov8-py38 --python=python3.8 --system-site-packages
 
 # Activate virtual environment
 $ source yolov8-py38/bin/activate
