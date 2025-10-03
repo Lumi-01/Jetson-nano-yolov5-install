@@ -1,0 +1,15 @@
+#open terminal
+
+>> sudo apt-get update
+
+# Install a utility needed to manage personal package archives (PPAs)
+>> sudo apt-get install software-properties-common
+
+# Add the 'deadsnakes' PPA, which provides newer/alternative Python versions
+>> sudo add-apt-repository ppa:deadsnakes/ppa
+
+>> sudo apt-get update
+
+# Install Python 3.8 and its necessary development headers (excluding venv to focus on the base interpreter)
+# -y flag automatically confirms installation prompts
+>> sudo apt-get install python3.8 python3.8-dev -y
