@@ -1,4 +1,6 @@
 #open terminal
+# python3-virtualenv install
+>> sudo apt install python3-virtualenv
 
 >> sudo apt-get update
 
