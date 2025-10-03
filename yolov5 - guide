@@ -23,6 +23,6 @@
 # https://forums.developer.nvidia.com/t/pytorch-for-jetson/72048
 # This .whl file is specifically pre-built for Jetson devices (aarch64 architecture).
 >> wget https://nvidia.box.com/shared/static/fjtbno0vpo676a25cgvuqc1wty0fkkg6.whl -O torch-1.10.0-cp36-cp36m-linux_aarch64.whl
->> pip3 install numpy torch-1.8.0-cp36-cp36m-linux_aarch64.whl
+>> pip3 install numpy torch-1.10.0-cp36-cp36m-linux_aarch64.whl
 
 
