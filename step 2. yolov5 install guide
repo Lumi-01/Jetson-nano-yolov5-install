@@ -6,6 +6,10 @@ $ python3 -m virtualenv yolov5-py36 --python=python3.6 --system-site-packages
 # Activate virtual environment
 $ source yolov5-py36/bin/activate
 
+# Install Cython and numpy
+$ pip3 install 'Cython<3.0'
+$ pip3 install numpy==1.19.2
+
 # Check OpenCV operation
 $ python3 
 >> import cv2
@@ -15,10 +19,6 @@ $ python3
 
 # Upgrade pip and build tools to the latest version
 $ pip3 install --upgrade pip setuptools wheel
-
-# Install Cython and numpy
-$ pip3 install 'Cython<3.0'
-$ pip3 install numpy==1.19.2
 
 # Download and Install PyTorch v1.10.0 for Python 3.6
 # https://forums.developer.nvidia.com/t/pytorch-for-jetson/72048
