@@ -53,7 +53,7 @@ https://github.com/Lumi-01/Jetson-nano-yolov5-and-yolov8-install/blob/main/step%
 
 ---------------------------------------------------------------------------------------------------------------------------------
 
-sh flie (!! Not tested, Operation not guaranteed !!)
+sh flie (Easy to install)
 
 ```
 1. yolov5 install guide
