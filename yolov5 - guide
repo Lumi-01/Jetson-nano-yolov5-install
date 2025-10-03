@@ -25,4 +25,23 @@
 >> wget https://nvidia.box.com/shared/static/fjtbno0vpo676a25cgvuqc1wty0fkkg6.whl -O torch-1.10.0-cp36-cp36m-linux_aarch64.whl
 >> pip3 install numpy torch-1.10.0-cp36-cp36m-linux_aarch64.whl
 
+# Install system dependencies required for building torchvision (e.g., JPEG and ZLib support).
+>>sudo apt-get install -y libjpeg-dev zlib1g-dev
+
+# Clone >the specific v0.11.1 branch of the torchvision repository from GitHub.
+# The files are placed in a new directory named 'torchvision_v0.11.1' in the home folder (~).
+>> git clone --branch v0.11.1 https://github.com/pytorch/vision ~/torchvision_v0.11.1
+
+# Navigate into the newly created torchvision directory.
+>> cd ~/torchvision_v0.11.1
+
+# Set the environment variable to ensure the correct version number (0.11.1) is used during the build process.
+>> export BUILD_VERSION=0.11.1
+
+# Compile and install torchvision from the source code.
+# WARNING: This process takes significant time (often 30+ minutes) on Jetson Nano devices.
+>> python3 setup.py install
+
+# Return to the user's home directory for the next steps.
+>> cd ~
 
