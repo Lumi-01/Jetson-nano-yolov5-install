@@ -55,7 +55,7 @@ sh flie (!! Not tested, Operation not guaranteed !!)
 
 ```
 step 1. virtualenv and python 3.8 install
-(Writing..)
+https://github.com/Lumi-01/Jetson-nano-yolov5-and-yolov8-install/blob/main/jetson_nano_Python%203.8_and_virtualenv_lnstall.sh
 
 step 2. yolov5 install guide
 https://github.com/Lumi-01/Jetson-nano-yolov5-and-yolov8-install/blob/main/jetson_nano_yolo5_lnstall.sh
