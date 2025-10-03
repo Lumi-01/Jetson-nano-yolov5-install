@@ -1,3 +1,5 @@
+#open terminal
+
 # python3-virtualenv install
 >> sudo apt install python3-virtualenv
 
@@ -26,7 +28,10 @@
 >> pip3 install numpy torch-1.10.0-cp36-cp36m-linux_aarch64.whl
 
 # Install system dependencies required for building torchvision (e.g., JPEG and ZLib support).
->>sudo apt-get install -y libjpeg-dev zlib1g-dev
+>> sudo apt-get install -y libjpeg-dev zlib1g-dev
+
+# This resolves "SyntaxError: invalid syntax" or "No matching distribution found" issues with newer versions.
+>> pip install Pillow==8.4.0
 
 # Clone >the specific v0.11.1 branch of the torchvision repository from GitHub.
 # The files are placed in a new directory named 'torchvision_v0.11.1' in the home folder (~).
