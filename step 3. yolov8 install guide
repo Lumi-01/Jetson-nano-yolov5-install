@@ -1,14 +1,17 @@
 #open terminal
 
-# Create virtualenv - Specify Python 3.8 version and use system site packages
-$ python3 -m virtualenv yolov8-py38 --python=python3.8 --system-site-packages
+# Create virtualenv - Specify Python 3.6 version and use system site packages
+$ python3 -m virtualenv yolov5-py36 --python=python3.6 --system-site-packages
+
+# Activate virtual environment
+$ source yolov5-py36/bin/activate
+
+# Upgrade pip and build tools to the latest version
+$ pip3 install --upgrade pip setuptools wheel
 
 # Install Cython and numpy
 $ pip3 install 'Cython<3.0'
 $ pip3 install numpy==1.19.2
-
-# Activate virtual environment
-$ source yolov8-py38/bin/activate
 
 # Check OpenCV operation
 $ python3 
