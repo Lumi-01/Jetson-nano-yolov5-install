@@ -12,7 +12,7 @@ Just follow the steps
 sh file is being tested
 
 ---------------------------------------------------------------------------------------------------------------------------------
-# Install opencv
+# 1. Install opencv
 
 Before working, you must install opencv.
 
@@ -37,7 +37,7 @@ $ ./OpenCV-4-11-0.sh
 After installation, you should do the following, because when you call the library using opencv, you get idle instructions (core dumped).
 
 
-# Prevent core dumped errors
+# 2. Prevent core dumped errors
 ```
 $ gedit ~/.bashrc
 
@@ -63,9 +63,9 @@ sh flie (Easy to install)
 ```
 1. yolov5 install script file
 https://raw.githubusercontent.com/Lumi-01/Jetson-nano-yolov5-install/refs/heads/main/jetson_nano_yolov5_lnstall.sh
+```
 
-
-# How to Install #
+## How to Install
 $ wget https://raw.githubusercontent.com/Lumi-01/Jetson-nano-yolov5-install/refs/heads/main/jetson_nano_yolov5_lnstall.sh
 $ sudo chmod 755 ./jetson_nano_yolov5_lnstall.sh
 $ ./jetson_nano_yolov5_lnstall.sh
