@@ -81,9 +81,11 @@ $ cd ~/yolov5
 
 # Image test
 $ python detect.py --weights yolov5s.pt --source data/images/bus.jpg
+# If there is a result in the "runs" folder in the yolov5 folder, it works properly.
 
 # Camera test
 $ python detect.py --weights yolov5s.pt --source 0
+# If the camera screen appears, it is working properly.
 
 # Deactivate virtual environment
 $ deactivate
