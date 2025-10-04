@@ -72,4 +72,20 @@ $ wget https://raw.githubusercontent.com/Lumi-01/Jetson-nano-yolov5-install/refs
 $ sudo chmod 755 ./jetson_nano_yolov5_lnstall.sh
 $ ./jetson_nano_yolov5_lnstall.sh
 ```
+---------------------------------------------------------------------------------------------------------------------------------
+# 4. Test after installation
+
+```
+$ source yolov5-py36/bin/activate
+$ cd ~/yolov5
+
+# Image test
+$ python detect.py --weights yolov5s.pt --source data/images/bus.jpg
+
+# Camera test
+$ python detect.py --weights yolov5s.pt --source 0
+
+# Deactivate virtual environment
+$ deactivate
+```
 
