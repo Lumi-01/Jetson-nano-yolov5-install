@@ -48,6 +48,7 @@ $ source ~/.bashrc
 
 
 ---------------------------------------------------------------------------------------------------------------------------------
+# 3. install yolov5
 
 Now, you can proceed with the installation according to the steps below "Must".
 
@@ -56,14 +57,13 @@ Now, you can proceed with the installation according to the steps below "Must".
 https://github.com/Lumi-01/Jetson-nano-yolov5-and-yolov8-install/blob/main/step%202.%20yolov5%20install%20guide
 ```
 
----------------------------------------------------------------------------------------------------------------------------------
-
 sh flie (Easy to install)
 
 ```
 1. yolov5 install script file
 https://raw.githubusercontent.com/Lumi-01/Jetson-nano-yolov5-install/refs/heads/main/jetson_nano_yolov5_lnstall.sh
 ```
+# 3-1 Utilize script files to install
 
 ## How to Install
 ```
