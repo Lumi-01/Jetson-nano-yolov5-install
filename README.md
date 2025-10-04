@@ -12,7 +12,7 @@ Just follow the steps
 sh file is being tested
 
 ---------------------------------------------------------------------------------------------------------------------------------
-# install opencv
+# Install opencv
 
 Before working, you must install opencv.
 
@@ -36,6 +36,7 @@ $ ./OpenCV-4-11-0.sh
 
 After installation, you should do the following, because when you call the library using opencv, you get idle instructions (core dumped).
 
+# Prevent core dumped errors
 ```
 $ gedit ~/.bashrc
 
