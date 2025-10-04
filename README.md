@@ -3,13 +3,11 @@
 
 
 
-Hello!
+**Hello!**
 
-This GitHub is for installing Python YOLOv5 on Jetson Nano.
+**This GitHub is for installing Python YOLOv5 on Jetson Nano.**
 
-Just follow the steps
-
-sh file is being tested
+**Just follow the steps or Installing Using a Script File**
 
 ---------------------------------------------------------------------------------------------------------------------------------
 # 1. Install opencv
@@ -58,7 +56,7 @@ https://github.com/Lumi-01/Jetson-nano-yolov5-and-yolov8-install/blob/main/step%
 ```
 
 
-## 3-1 Utilize script files to install
+## Installing Using a Script File
 
 ```
 1. yolov5 install script file
