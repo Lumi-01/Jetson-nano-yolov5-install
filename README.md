@@ -58,7 +58,7 @@ https://github.com/Lumi-01/Jetson-nano-yolov5-and-yolov8-install/blob/main/step%
 ```
 
 
-## Installing Using a Script File
+## 3-1. Installing Using a Script File
 
 ```
 1. yolov5 install script file
