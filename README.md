@@ -25,6 +25,7 @@ please set the memory swap to 8gb
 
 ```
 # open terminal
+
 $ wget https://github.com/Qengineering/Install-OpenCV-Jetson-Nano/raw/main/OpenCV-4-11-0.sh
 
 # Version made all cores work regardless of memory swap
@@ -39,6 +40,8 @@ After installation, you should do the following, because when you call the libra
 
 # 2. Prevent core dumped errors
 ```
+# open terminal
+
 $ gedit ~/.bashrc
 
 # Add to the last line.
@@ -68,6 +71,8 @@ https://raw.githubusercontent.com/Lumi-01/Jetson-nano-yolov5-install/refs/heads/
 
 ### How to install using a script file
 ```
+# open terminal
+
 $ wget https://raw.githubusercontent.com/Lumi-01/Jetson-nano-yolov5-install/refs/heads/main/jetson_nano_yolov5_lnstall.sh
 $ sudo chmod 755 ./jetson_nano_yolov5_lnstall.sh
 $ ./jetson_nano_yolov5_lnstall.sh
@@ -76,6 +81,8 @@ $ ./jetson_nano_yolov5_lnstall.sh
 # 4. Test after installation
 
 ```
+# open terminal
+
 $ source yolov5-py36/bin/activate
 $ cd ~/yolov5
 
