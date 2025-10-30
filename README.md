@@ -71,6 +71,8 @@ https://raw.githubusercontent.com/Lumi-01/Jetson-nano-yolov5-install/refs/heads/
 
 ### How to install using a script file
 ```
+# You will need to manually enter your password a few times.
+
 # open terminal
 
 $ wget https://raw.githubusercontent.com/Lumi-01/Jetson-nano-yolov5-install/refs/heads/main/jetson_nano_yolov5_lnstall.sh
