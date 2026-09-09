@@ -1,76 +1,69 @@
-#!/bin/bash
-#
-# This script automates the setup of a YOLOv5 environment on an NVIDIA Jetson device.
-# It specifically targets Python 3.6 and installs compatible versions of
-# PyTorch, Torchvision, and other dependencies.
-#
-# Exit immediately if a command exits with a non-zero status.
-set -e
+#!/usr/bin/env bash
+set -Eeuo pipefail
 
-echo "--- Starting YOLOv5 Setup for NVIDIA Jetson (Python 3.6) ---"
+VENV_DIR="${HOME}/yolov5-py36"
+YOLO_DIR="${HOME}/yolov5"
+YOLO_COMMIT="9bcc32a"
+TORCHVISION_VERSION="0.11.1"
 
-# --- 1. Create and Activate Virtual Environment ---
-echo "[1/6] Creating Python 3.6 virtual environment in '~/yolov5-py36'..."
-python3 -m virtualenv ~/yolov5-py36 --python=python3.6 --system-site-packages
-source ~/yolov5-py36/bin/activate
-echo "Virtual environment activated for this session."
+die() {
+  printf 'Error: %s\n' "$*" >&2
+  exit 1
+}
 
-# --- 2. Install Core Python Packages ---
-echo "[2/6] Upgrading pip and installing base packages (Cython, Numpy, Pillow)..."
-pip3 install --upgrade pip setuptools wheel
-pip3 install 'Cython<3.0'
-pip3 install numpy==1.19.2
-# This specific Pillow version helps avoid potential syntax errors with older Python versions.
-pip3 install Pillow==8.4.0
+[[ "$(uname -m)" == "aarch64" ]] || die "This installer requires an aarch64 Jetson system."
+command -v python3.6 >/dev/null 2>&1 || die "Python 3.6 is required. Install the JetPack-provided Python first."
+[[ ! -e "$VENV_DIR" ]] || die "$VENV_DIR already exists. Rename or remove it after reviewing its contents."
+[[ ! -e "$YOLO_DIR" ]] || die "$YOLO_DIR already exists. Rename or remove it after reviewing its contents."
 
-# --- 3. Install PyTorch ---
-echo "[3/6] Downloading and installing PyTorch v1.10.0 for Jetson..."
-wget https://nvidia.box.com/shared/static/fjtbno0vpo676a25cgvuqc1wty0fkkg6.whl -O torch-1.10.0-cp36-cp36m-linux_aarch64.whl
-pip3 install torch-1.10.0-cp36-cp36m-linux_aarch64.whl
-# Clean up the downloaded file
-rm torch-1.10.0-cp36-cp36m-linux_aarch64.whl
+printf '%s\n' '[1/7] Installing system prerequisites...'
+sudo apt-get update
+sudo apt-get install -y git wget python3-virtualenv libjpeg-dev zlib1g-dev
 
-# --- 4. Install Torchvision from Source ---
-echo "[4/6] Building and installing Torchvision v0.11.1 from source..."
-echo "Installing build dependencies for Torchvision..."
-sudo apt-get update && sudo apt-get install -y libjpeg-dev zlib1g-dev
+printf '%s\n' '[2/7] Creating the Python 3.6 virtual environment...'
+python3.6 -m virtualenv "$VENV_DIR" --python=python3.6 --system-site-packages
+# shellcheck disable=SC1091
+source "$VENV_DIR/bin/activate"
 
-echo "Cloning Torchvision v0.11.1 repository..."
-git clone --branch v0.11.1 https://github.com/pytorch/vision ~/torchvision_build
-cd ~/torchvision_build
+printf '%s\n' '[3/7] Installing Python 3.6-compatible build tools...'
+python -m pip install --upgrade 'pip<22' 'setuptools<60' 'wheel<0.38'
+python -m pip install 'Cython<3.0' 'numpy==1.19.2' 'Pillow==8.4.0'
 
-export BUILD_VERSION=0.11.1
-echo "Starting Torchvision build. WARNING: This process can take over 30 minutes."
-python3 setup.py install
-echo "Torchvision build complete."
+WORK_DIR="$(mktemp -d "${TMPDIR:-/tmp}/jetson-yolov5.XXXXXX")"
+cleanup() {
+  rm -rf -- "$WORK_DIR"
+}
+trap cleanup EXIT
 
-# Clean up the build directory
-cd ~
-rm -rf ~/torchvision_build
+printf '%s\n' '[4/7] Installing PyTorch 1.10.0...'
+TORCH_WHEEL="$WORK_DIR/torch-1.10.0-cp36-cp36m-linux_aarch64.whl"
+wget -O "$TORCH_WHEEL" 'https://nvidia.box.com/shared/static/fjtbno0vpo676a25cgvuqc1wty0fkkg6.whl'
+python -m pip install "$TORCH_WHEEL"
 
-# --- 5. Clone and Configure YOLOv5 ---
-echo "[5/6] Cloning YOLOv5 and checking out a Python 3.6 compatible version..."
-git clone https://github.com/ultralytics/yolov5 ~/yolov5
-cd ~/yolov5
-# This commit is the last version to officially support Python 3.6.
-git reset --hard 9bcc32a
+printf '%s\n' '[5/7] Building Torchvision 0.11.1 (this can take over 30 minutes)...'
+git clone --depth 1 --branch "v${TORCHVISION_VERSION}" --single-branch \
+  https://github.com/pytorch/vision "$WORK_DIR/vision"
+(
+  cd "$WORK_DIR/vision"
+  export BUILD_VERSION="$TORCHVISION_VERSION"
+  python setup.py install
+)
 
-# --- 6. Install YOLOv5 Dependencies ---
-echo "[6/6] Modifying requirements.txt and installing dependencies..."
-# Comment out packages that were manually installed or are handled by the system.
-# This prevents version conflicts.
-sed -i '/numpy/s/^/#/' requirements.txt
-sed -i '/opencv-python/s/^/#/' requirements.txt
-sed -i '/Pillow/s/^/#/' requirements.txt
-sed -i '/torch>=/s/^/#/' requirements.txt
-sed -i '/torchvision>=/s/^/#/' requirements.txt
+printf '%s\n' '[6/7] Checking out the Python 3.6-compatible YOLOv5 revision...'
+git clone https://github.com/ultralytics/yolov5 "$YOLO_DIR"
+(
+  cd "$YOLO_DIR"
+  git checkout --detach "$YOLO_COMMIT"
+  sed -i -E \
+    -e '/^[[:space:]]*numpy([<>=]|$)/s/^/# managed by Jetson installer: /' \
+    -e '/^[[:space:]]*opencv-python([<>=]|$)/s/^/# managed by Jetson installer: /' \
+    -e '/^[[:space:]]*Pillow([<>=]|$)/s/^/# managed by Jetson installer: /' \
+    -e '/^[[:space:]]*torch([<>=]|$)/s/^/# managed by Jetson installer: /' \
+    -e '/^[[:space:]]*torchvision([<>=]|$)/s/^/# managed by Jetson installer: /' \
+    requirements.txt
+)
 
-pip3 install -r requirements.txt
+printf '%s\n' '[7/7] Installing the remaining YOLOv5 dependencies...'
+python -m pip install -r "$YOLO_DIR/requirements.txt"
 
-echo ""
-echo "--- YOLOv5 Setup Successfully Completed! ---"
-echo ""
-echo "The virtual environment 'yolov5-py36' is ready."
-echo "To activate it in a new terminal session, run:"
-echo "source ~/yolov5-py36/bin/activate"
-echo "---------------------------------------------"
+printf '\nInstallation complete. Activate it with:\n  source %q/bin/activate\n' "$VENV_DIR"
