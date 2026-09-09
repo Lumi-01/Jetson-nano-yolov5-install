@@ -1,5 +1,8 @@
-# open terminal
-$ gedit ~/.bashrc
-#add to last line
-$ export OPENBLAS_CORETYPE=ARMV8 python3
-$ source ~/.bashrc
+# OpenCV / OpenBLAS core-dump workaround
+
+# Add the environment variable to your shell startup file.
+echo 'export OPENBLAS_CORETYPE=ARMV8' >> ~/.bashrc
+source ~/.bashrc
+
+# Verify OpenCV.
+python3 -c 'import cv2; print(cv2.__version__)'
