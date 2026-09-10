@@ -1,10 +1,44 @@
 #!/bin/bash
 set -e
+
+SUDO_KEEPALIVE_PID=""
+
+cleanup_sudo() {
+  if [ -n "$SUDO_KEEPALIVE_PID" ] && kill -0 "$SUDO_KEEPALIVE_PID" 2>/dev/null; then
+    kill "$SUDO_KEEPALIVE_PID" 2>/dev/null || true
+    wait "$SUDO_KEEPALIVE_PID" 2>/dev/null || true
+  fi
+}
+trap cleanup_sudo EXIT
+
+prepare_sudo() {
+  if ! command -v sudo >/dev/null 2>&1; then
+    echo "Error: sudo is required." >&2
+    exit 1
+  fi
+  echo "Administrator permission is required. Enter the sudo password once before installation."
+  if ! sudo -v; then
+    echo "Error: sudo authentication failed." >&2
+    exit 1
+  fi
+  (
+    while true; do
+      sleep 50
+      sudo -n true 2>/dev/null || exit
+    done
+  ) &
+  SUDO_KEEPALIVE_PID=$!
+}
 install_opencv () {
   # Check if the file /proc/device-tree/model exists
   if [ -e "/proc/device-tree/model" ]; then
       # Read the model information from /proc/device-tree/model and remove null bytes
       model=$(tr -d '\0' < /proc/device-tree/model)
+      if [[ $model != *"Orin"* && $model != *"Jetson Nano"* ]]; then
+          echo "Unable to determine the Jetson Nano model."
+          exit 1
+      fi
+      prepare_sudo
       # Check if the model information contains "Jetson Nano Orin"
       echo ""
       if [[ $model == *"Orin"* ]]; then

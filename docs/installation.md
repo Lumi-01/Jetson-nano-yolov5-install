@@ -11,6 +11,10 @@
 
 These versions are intentionally pinned because current releases no longer support Python 3.6 or the Jetson Nano software stack.
 
+## Administrator authentication
+
+Each installer performs its hardware and existing-path checks first, then runs `sudo -v` before making changes. Enter the `sudo` password once at that point. A background keepalive refreshes the sudo timestamp during long builds and is stopped automatically when the script exits. The password is not stored or passed through command-line arguments.
+
 ## OpenCV
 
 Set up at least 8 GB of swap, then run:
@@ -27,7 +31,7 @@ The installer defaults to two build jobs on the original Jetson Nano to reduce o
 OPENCV_BUILD_JOBS=4 ./OpenCV-4.11.0.sh
 ```
 
-The OpenCV installer proceeds automatically when it would previously have asked for `Y/n`: it switches to an installed GCC 8 when required and replaces existing `~/opencv`, `~/opencv_contrib`, `~/opencv.zip`, and `~/opencv_contrib.zip` paths. Back up custom source changes first. A `sudo` password prompt, if shown, still requires user input.
+The OpenCV installer proceeds automatically when it would previously have asked for `Y/n`: it switches to an installed GCC 8 when required and replaces existing `~/opencv`, `~/opencv_contrib`, `~/opencv.zip`, and `~/opencv_contrib.zip` paths. Back up custom source changes first. The single initial `sudo` password prompt still requires user input.
 
 ## YOLOv5
 

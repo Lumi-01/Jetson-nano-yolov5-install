@@ -13,6 +13,7 @@ Install a Jetson Nano-compatible YOLOv5 environment with Python 3.6, PyTorch 1.1
 - Use a stable power supply and allow several hours for the OpenCV build.
 - Do not run the scripts as `root`; they request `sudo` only when required.
 - The OpenCV installer automatically answers its continuation prompts with Yes. Existing `~/opencv`, `~/opencv_contrib`, and their ZIP downloads are replaced without another prompt.
+- After the safety checks, each installer asks for the `sudo` password once with `sudo -v` and keeps that authorization alive during the long-running build. Passwords are never stored.
 
 ## Quick start
 
