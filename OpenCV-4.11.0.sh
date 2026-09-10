@@ -1,10 +1,44 @@
 #!/bin/bash
 set -e
+
+SUDO_KEEPALIVE_PID=""
+
+cleanup_sudo() {
+  if [ -n "$SUDO_KEEPALIVE_PID" ] && kill -0 "$SUDO_KEEPALIVE_PID" 2>/dev/null; then
+    kill "$SUDO_KEEPALIVE_PID" 2>/dev/null || true
+    wait "$SUDO_KEEPALIVE_PID" 2>/dev/null || true
+  fi
+}
+trap cleanup_sudo EXIT
+
+prepare_sudo() {
+  if ! command -v sudo >/dev/null 2>&1; then
+    echo "Error: sudo is required." >&2
+    exit 1
+  fi
+  echo "Administrator permission is required. Enter the sudo password once before installation."
+  if ! sudo -v; then
+    echo "Error: sudo authentication failed." >&2
+    exit 1
+  fi
+  (
+    while true; do
+      sleep 50
+      sudo -n true 2>/dev/null || exit
+    done
+  ) &
+  SUDO_KEEPALIVE_PID=$!
+}
 install_opencv () {
   # Check if the file /proc/device-tree/model exists
   if [ -e "/proc/device-tree/model" ]; then
       # Read the model information from /proc/device-tree/model and remove null bytes
       model=$(tr -d '\0' < /proc/device-tree/model)
+      if [[ $model != *"Orin"* && $model != *"Jetson Nano"* ]]; then
+          echo "Unable to determine the Jetson Nano model."
+          exit 1
+      fi
+      prepare_sudo
       # Check if the model information contains "Jetson Nano Orin"
       echo ""
       if [[ $model == *"Orin"* ]]; then
@@ -23,23 +57,13 @@ install_opencv () {
 		  echo "OpenCV will fail to compile with this version."
 		  echo ""
 	
-		  if [ -x /usr/bin/gcc-8 ] && [ -x /usr/bin/g++-8 ]; then
-		      echo "GCC 8 is available on your system."
-	
-		      printf "Do you want to temporarily switch to GCC 8 for this installation (Y/n)? "
-		      read confirm_switch
-	
-		      if [[ "$confirm_switch" != "${confirm_switch#[Nn]}" ]]; then
-			  echo "Aborting installation as requested."
-			  exit 1
-		      fi
-	
-		      echo "Switching to GCC 8..."
-		      sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-8 80
-		      sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-8 80
-		      sudo update-alternatives --set gcc /usr/bin/gcc-8
-		      sudo update-alternatives --set g++ /usr/bin/g++-8
-		  else
+          if [ -x /usr/bin/gcc-8 ] && [ -x /usr/bin/g++-8 ]; then
+              echo "GCC 8 is available. Automatic confirmation enabled; switching to GCC 8."
+              sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-8 80
+              sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-8 80
+              sudo update-alternatives --set gcc /usr/bin/gcc-8
+              sudo update-alternatives --set g++ /usr/bin/g++-8
+          else
 		      echo "GCC 8 is not installed. Please install it using:"
 		      echo "  sudo apt-get install gcc-8 g++-8"
 		      exit 1
@@ -188,22 +212,13 @@ install_opencv () {
   echo "You've successfully installed OpenCV 4.11.0 on your Nano"
 }
 
-cd ~
+cd "$HOME"
 
-if [ -d ~/opencv/build ]; then
-  echo " "
-  echo "You have a directory ~/opencv/build on your disk."
-  echo "Continuing the installation will replace this folder."
-  echo " "
-  
-  printf "Do you wish to continue (Y/n)?"
-  read answer
-
-  if [ "$answer" != "${answer#[Nn]}" ] ;then 
-      echo "Leaving without installing OpenCV"
-  else
-      install_opencv
-  fi
-else
-    install_opencv
+if [ -d "$HOME/opencv/build" ]; then
+  echo ""
+  echo "An existing $HOME/opencv/build directory was found."
+  echo "Automatic confirmation enabled; the existing OpenCV source tree will be replaced."
+  echo ""
 fi
+
+install_opencv
