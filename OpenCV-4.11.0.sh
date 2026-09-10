@@ -5,7 +5,7 @@ install_opencv () {
   if [ -e "/proc/device-tree/model" ]; then
       # Read the model information from /proc/device-tree/model and remove null bytes
       model=$(tr -d '\0' < /proc/device-tree/model)
-      # Check if the model information contains "Jetson Nano Orion"
+      # Check if the model information contains "Jetson Nano Orin"
       echo ""
       if [[ $model == *"Orin"* ]]; then
           echo "Detecting a Jetson Nano Orin."
@@ -47,8 +47,9 @@ install_opencv () {
 	fi
           ARCH=5.3
           PTX="sm_53"
-	  # Use all 4 cores regardless of swap space
-	  NO_JOB=4
+	  # Default to two jobs on the original Nano to reduce out-of-memory failures.
+	  # Override only after configuring sufficient swap: OPENCV_BUILD_JOBS=4 ./OpenCV-4.11.0.sh
+	  NO_JOB="${OPENCV_BUILD_JOBS:-2}"
       else
           echo "Unable to determine the Jetson Nano model."
           exit 1
@@ -113,7 +114,8 @@ install_opencv () {
  
   # remove old versions or previous builds
   cd ~ 
-  sudo rm -rf opencv*
+  sudo rm -rf -- "$HOME/opencv" "$HOME/opencv_contrib"
+  rm -f -- "$HOME/opencv.zip" "$HOME/opencv_contrib.zip"
   # download the latest version
   wget -O opencv.zip https://github.com/opencv/opencv/archive/4.11.0.zip 
   wget -O opencv_contrib.zip https://github.com/opencv/opencv_contrib/archive/4.11.0.zip 
