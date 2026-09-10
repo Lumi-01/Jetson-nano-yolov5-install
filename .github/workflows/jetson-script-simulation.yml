@@ -1,0 +1,33 @@
+name: Jetson script simulation
+
+on:
+  push:
+    paths:
+      - '**.sh'
+      - 'tests/**'
+      - '.github/workflows/jetson-script-simulation.yml'
+  pull_request:
+    paths:
+      - '**.sh'
+      - 'tests/**'
+      - '.github/workflows/jetson-script-simulation.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: jetson-script-simulation-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  simulate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v5
+
+      - name: Run safe script simulations
+        run: bash tests/simulate.sh

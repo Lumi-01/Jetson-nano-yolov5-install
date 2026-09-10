@@ -60,6 +60,10 @@ Detection output is written under `~/yolov5/runs/`.
 - [Detailed installation guide](docs/installation.md)
 - [Troubleshooting](docs/troubleshooting.md)
 
+## Automated tests
+
+GitHub Actions checks every shell script with `bash -n` and safely exercises the hardware and existing-installation guards on an Ubuntu runner. It also verifies the pinned versions, temporary-directory cleanup, explicit OpenCV cleanup targets, and the original Nano's conservative build-job default. Use **Actions → Jetson script simulation → Run workflow** to run it manually.
+
 ## Included files
 
 | File | Purpose |
