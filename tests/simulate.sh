@@ -69,7 +69,7 @@ grep -F -- 'rm -rf -- "$WORK_DIR"' "$YOLO_SCRIPT" >/dev/null
 grep -F -- 'sudo -v' "$YOLO_SCRIPT" >/dev/null
 grep -F -- 'sudo -n true' "$YOLO_SCRIPT" >/dev/null
 grep -F -- 'sudo rm -rf -- "$HOME/opencv" "$HOME/opencv_contrib"' "$OPENCV_SCRIPT" >/dev/null
-grep -F -- 'NO_JOB="${OPENCV_BUILD_JOBS:-2}"' "$OPENCV_SCRIPT" >/dev/null
+grep -F -- 'NO_JOB="${OPENCV_BUILD_JOBS:-4}"' "$OPENCV_SCRIPT" >/dev/null
 grep -F -- 'Automatic confirmation enabled' "$OPENCV_SCRIPT" >/dev/null
 grep -F -- 'sudo -v' "$OPENCV_SCRIPT" >/dev/null
 grep -F -- 'sudo -n true' "$OPENCV_SCRIPT" >/dev/null
@@ -78,8 +78,16 @@ grep -F -- 'jetson_nano_yolov5_lnstall.sh' "$ALL_SCRIPT" >/dev/null
 grep -F -- 'OPENBLAS_CORETYPE=ARMV8' "$ALL_SCRIPT" >/dev/null
 grep -F -- 'opencv.done' "$ALL_SCRIPT" >/dev/null
 grep -F -- 'yolov5.done' "$ALL_SCRIPT" >/dev/null
+grep -F -- 'TORCHVISION_BUILD_JOBS="${TORCHVISION_BUILD_JOBS:-4}"' "$YOLO_SCRIPT" >/dev/null
+grep -F -- 'export MAX_JOBS="$TORCHVISION_BUILD_JOBS"' "$YOLO_SCRIPT" >/dev/null
+grep -F -- 'OPENCV_BUILD_JOBS="${OPENCV_BUILD_JOBS:-4}"' "$ALL_SCRIPT" >/dev/null
 grep -F -- 'sudo -v' "$ALL_SCRIPT" >/dev/null
 grep -F -- 'sudo -n true' "$ALL_SCRIPT" >/dev/null
+grep -F -- 'mkswap "$TEMP_SWAP_FILE"' "$ALL_SCRIPT" >/dev/null
+grep -F -- 'swapon "$TEMP_SWAP_FILE"' "$ALL_SCRIPT" >/dev/null
+grep -F -- 'swapoff "$TEMP_SWAP_FILE"' "$ALL_SCRIPT" >/dev/null
+grep -F -- 'target_kb=$((8 * 1024 * 1024))' "$ALL_SCRIPT" >/dev/null
+grep -F -- 'available_kb <= needed_kb + 1024 * 1024' "$ALL_SCRIPT" >/dev/null
 if grep -F -- 'sudo -S' "$YOLO_SCRIPT" "$OPENCV_SCRIPT" "$ALL_SCRIPT" >/dev/null; then
   printf '%s\n' 'A script attempts to read a sudo password from standard input.' >&2
   exit 1

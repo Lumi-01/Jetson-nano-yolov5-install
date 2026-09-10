@@ -7,6 +7,8 @@ STATE_DIR="${XDG_STATE_HOME:-$HOME/.local/state}/jetson-nano-yolov5-install"
 LOG_DIR="$STATE_DIR/logs"
 WORK_DIR=""
 SUDO_KEEPALIVE_PID=""
+TEMP_SWAP_FILE=""
+TEMP_SWAP_ACTIVE=0
 FORCE=0
 ALLOW_LOW_SWAP=0
 
@@ -18,7 +20,7 @@ Installs OpenCV 4.11.0, applies the OpenBLAS workaround, installs YOLOv5,
 and verifies the resulting Python environment on an original Jetson Nano.
 
   --force           rerun stages already marked as completed
-  --allow-low-swap  continue even when less than 8GB of swap is configured
+  --allow-low-swap  continue if temporary swap creation is not possible
   -h, --help        show this help
 EOF
 }
@@ -29,6 +31,22 @@ die() {
 }
 
 cleanup() {
+  if [[ -n "$TEMP_SWAP_FILE" ]]; then
+    if [[ "$TEMP_SWAP_ACTIVE" == "1" ]]; then
+      printf 'Restoring the original swap configuration...\n'
+      if sudo -n swapoff "$TEMP_SWAP_FILE" 2>/dev/null; then
+        TEMP_SWAP_ACTIVE=0
+      else
+        printf 'Warning: could not disable temporary swap: %s\n' "$TEMP_SWAP_FILE" >&2
+        printf 'After freeing memory, run: sudo swapoff %q && sudo rm -f %q\n' \
+          "$TEMP_SWAP_FILE" "$TEMP_SWAP_FILE" >&2
+      fi
+    fi
+    if [[ "$TEMP_SWAP_ACTIVE" == "0" ]]; then
+      sudo -n rm -f -- "$TEMP_SWAP_FILE" 2>/dev/null || \
+        printf 'Warning: remove the leftover temporary file manually: %s\n' "$TEMP_SWAP_FILE" >&2
+    fi
+  fi
   if [[ -n "$SUDO_KEEPALIVE_PID" ]] && kill -0 "$SUDO_KEEPALIVE_PID" 2>/dev/null; then
     kill "$SUDO_KEEPALIVE_PID" 2>/dev/null || true
     wait "$SUDO_KEEPALIVE_PID" 2>/dev/null || true
@@ -53,6 +71,61 @@ prepare_sudo() {
   export JETSON_SUDO_READY=1
 }
 
+ensure_swap() {
+  local target_kb=$((8 * 1024 * 1024))
+  local current_kb needed_kb needed_mb available_kb
+
+  current_kb="$(awk '/^SwapTotal:/ {print $2}' /proc/meminfo)"
+  current_kb="${current_kb:-0}"
+  if (( current_kb >= target_kb )); then
+    printf 'Swap: %.1f GiB already configured; no temporary swap needed.\n' \
+      "$(awk -v kb="$current_kb" 'BEGIN {print kb / 1024 / 1024}')"
+    return
+  fi
+
+  needed_kb=$((target_kb - current_kb))
+  needed_mb=$(((needed_kb + 1023) / 1024))
+  available_kb="$(df -Pk /var/tmp | awk 'NR == 2 {print $4}')"
+  available_kb="${available_kb:-0}"
+  if (( available_kb <= needed_kb + 1024 * 1024 )); then
+    if [[ "$ALLOW_LOW_SWAP" == "1" ]]; then
+      printf 'Warning: insufficient free space for temporary swap; continuing by request.\n' >&2
+      return
+    fi
+    die "Not enough free space to add temporary swap while retaining 1GB free."
+  fi
+
+  command -v mkswap >/dev/null 2>&1 || die "mkswap is required."
+  command -v swapon >/dev/null 2>&1 || die "swapon is required."
+  command -v swapoff >/dev/null 2>&1 || die "swapoff is required."
+  TEMP_SWAP_FILE="/var/tmp/jetson-install-all-${UID}-$$.swap"
+  [[ ! -e "$TEMP_SWAP_FILE" ]] || die "Temporary swap path already exists: $TEMP_SWAP_FILE"
+
+  printf 'Adding %s MiB of temporary swap to reach 8 GiB...\n' "$needed_mb"
+  if command -v fallocate >/dev/null 2>&1; then
+    if ! sudo fallocate -l "${needed_mb}M" "$TEMP_SWAP_FILE"; then
+      sudo rm -f -- "$TEMP_SWAP_FILE"
+      sudo dd if=/dev/zero of="$TEMP_SWAP_FILE" bs=1M count="$needed_mb"
+    fi
+  else
+    sudo dd if=/dev/zero of="$TEMP_SWAP_FILE" bs=1M count="$needed_mb"
+  fi
+
+  if ! sudo chmod 600 "$TEMP_SWAP_FILE" || \
+     ! sudo mkswap "$TEMP_SWAP_FILE" || \
+     ! sudo swapon "$TEMP_SWAP_FILE"; then
+    sudo rm -f -- "$TEMP_SWAP_FILE" 2>/dev/null || true
+    TEMP_SWAP_FILE=""
+    if [[ "$ALLOW_LOW_SWAP" == "1" ]]; then
+      printf 'Warning: temporary swap setup failed; continuing by request.\n' >&2
+      return
+    fi
+    die "Failed to create temporary swap."
+  fi
+  TEMP_SWAP_ACTIVE=1
+  printf 'Temporary swap enabled: %s\n' "$TEMP_SWAP_FILE"
+}
+
 for argument in "$@"; do
   case "$argument" in
     --force) FORCE=1 ;;
@@ -71,12 +144,6 @@ DEVICE_MODEL="$(tr -d '\0' </proc/device-tree/model)"
 command -v python3.6 >/dev/null 2>&1 || die "Python 3.6 is required from JetPack 4.6.x."
 command -v wget >/dev/null 2>&1 || die "wget is required."
 
-SWAP_KB="$(awk '/^SwapTotal:/ {print $2}' /proc/meminfo)"
-SWAP_KB="${SWAP_KB:-0}"
-if (( SWAP_KB < 8 * 1024 * 1024 && ALLOW_LOW_SWAP == 0 )); then
-  die "At least 8GB of swap is recommended. Configure swap or rerun with --allow-low-swap."
-fi
-
 mkdir -p "$LOG_DIR"
 LOG_FILE="$LOG_DIR/install-$(date +%Y%m%d-%H%M%S).log"
 exec > >(tee -a "$LOG_FILE") 2>&1
@@ -84,6 +151,10 @@ exec > >(tee -a "$LOG_FILE") 2>&1
 printf 'Device: %s\n' "$DEVICE_MODEL"
 printf 'Log: %s\n' "$LOG_FILE"
 prepare_sudo
+ensure_swap
+export OPENCV_BUILD_JOBS="${OPENCV_BUILD_JOBS:-4}"
+export TORCHVISION_BUILD_JOBS="${TORCHVISION_BUILD_JOBS:-4}"
+printf 'Build jobs: OpenCV=%s, Torchvision=%s\n' "$OPENCV_BUILD_JOBS" "$TORCHVISION_BUILD_JOBS"
 
 WORK_DIR="$(mktemp -d "${TMPDIR:-/tmp}/jetson-install-all.XXXXXX")"
 OPENCV_SCRIPT="$SCRIPT_DIR/OpenCV-4.11.0.sh"

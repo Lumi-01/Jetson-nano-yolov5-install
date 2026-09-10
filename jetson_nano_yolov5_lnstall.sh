@@ -5,6 +5,7 @@ VENV_DIR="${HOME}/yolov5-py36"
 YOLO_DIR="${HOME}/yolov5"
 YOLO_COMMIT="9bcc32a"
 TORCHVISION_VERSION="0.11.1"
+TORCHVISION_BUILD_JOBS="${TORCHVISION_BUILD_JOBS:-4}"
 WORK_DIR=""
 SUDO_KEEPALIVE_PID=""
 
@@ -73,6 +74,7 @@ git clone --depth 1 --branch "v${TORCHVISION_VERSION}" --single-branch \
 (
   cd "$WORK_DIR/vision"
   export BUILD_VERSION="$TORCHVISION_VERSION"
+  export MAX_JOBS="$TORCHVISION_BUILD_JOBS"
   python setup.py install
 )
 
