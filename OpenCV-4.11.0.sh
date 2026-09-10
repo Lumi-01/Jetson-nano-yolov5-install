@@ -23,23 +23,13 @@ install_opencv () {
 		  echo "OpenCV will fail to compile with this version."
 		  echo ""
 	
-		  if [ -x /usr/bin/gcc-8 ] && [ -x /usr/bin/g++-8 ]; then
-		      echo "GCC 8 is available on your system."
-	
-		      printf "Do you want to temporarily switch to GCC 8 for this installation (Y/n)? "
-		      read confirm_switch
-	
-		      if [[ "$confirm_switch" != "${confirm_switch#[Nn]}" ]]; then
-			  echo "Aborting installation as requested."
-			  exit 1
-		      fi
-	
-		      echo "Switching to GCC 8..."
-		      sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-8 80
-		      sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-8 80
-		      sudo update-alternatives --set gcc /usr/bin/gcc-8
-		      sudo update-alternatives --set g++ /usr/bin/g++-8
-		  else
+          if [ -x /usr/bin/gcc-8 ] && [ -x /usr/bin/g++-8 ]; then
+              echo "GCC 8 is available. Automatic confirmation enabled; switching to GCC 8."
+              sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-8 80
+              sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-8 80
+              sudo update-alternatives --set gcc /usr/bin/gcc-8
+              sudo update-alternatives --set g++ /usr/bin/g++-8
+          else
 		      echo "GCC 8 is not installed. Please install it using:"
 		      echo "  sudo apt-get install gcc-8 g++-8"
 		      exit 1
@@ -188,22 +178,13 @@ install_opencv () {
   echo "You've successfully installed OpenCV 4.11.0 on your Nano"
 }
 
-cd ~
+cd "$HOME"
 
-if [ -d ~/opencv/build ]; then
-  echo " "
-  echo "You have a directory ~/opencv/build on your disk."
-  echo "Continuing the installation will replace this folder."
-  echo " "
-  
-  printf "Do you wish to continue (Y/n)?"
-  read answer
-
-  if [ "$answer" != "${answer#[Nn]}" ] ;then 
-      echo "Leaving without installing OpenCV"
-  else
-      install_opencv
-  fi
-else
-    install_opencv
+if [ -d "$HOME/opencv/build" ]; then
+  echo ""
+  echo "An existing $HOME/opencv/build directory was found."
+  echo "Automatic confirmation enabled; the existing OpenCV source tree will be replaced."
+  echo ""
 fi
+
+install_opencv

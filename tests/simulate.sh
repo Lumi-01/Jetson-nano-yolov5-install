@@ -64,6 +64,11 @@ grep -F -- "'pip<22' 'setuptools<60' 'wheel<0.38'" "$YOLO_SCRIPT" >/dev/null
 grep -F -- 'rm -rf -- "$WORK_DIR"' "$YOLO_SCRIPT" >/dev/null
 grep -F -- 'sudo rm -rf -- "$HOME/opencv" "$HOME/opencv_contrib"' "$OPENCV_SCRIPT" >/dev/null
 grep -F -- 'NO_JOB="${OPENCV_BUILD_JOBS:-2}"' "$OPENCV_SCRIPT" >/dev/null
+grep -F -- 'Automatic confirmation enabled' "$OPENCV_SCRIPT" >/dev/null
+if grep -E -- '^[[:space:]]*read([[:space:]]|$)' "$OPENCV_SCRIPT" >/dev/null; then
+  printf '%s\n' 'Interactive read remains in the OpenCV installer.' >&2
+  exit 1
+fi
 if grep -E -- 'rm[[:space:]]+-rf[[:space:]]+opencv\*' "$OPENCV_SCRIPT" >/dev/null; then
   printf '%s\n' 'Unsafe wildcard OpenCV cleanup found.' >&2
   exit 1

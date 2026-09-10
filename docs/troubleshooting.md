@@ -20,7 +20,7 @@ Do not append `python3` to the `export` command. `export OPENBLAS_CORETYPE=ARMV8
 
 ## Existing installation detected
 
-The installers intentionally refuse to overwrite existing source, build, or virtual-environment directories. Inspect and rename those directories before retrying.
+The YOLOv5 installer refuses to overwrite `~/yolov5` or `~/yolov5-py36`; inspect and rename those directories before retrying. The OpenCV installer is intentionally non-interactive and replaces its existing source directories and downloaded ZIP files automatically, so back up custom OpenCV changes before running it.
 
 ## Camera is not detected
 

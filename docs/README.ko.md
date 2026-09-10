@@ -1,0 +1,71 @@
+# Jetson Nano YOLOv5 설치 가이드
+
+이 저장소는 **오리지널 NVIDIA Jetson Nano**, **JetPack 4.6.x**, **Ubuntu 18.04**, **Python 3.6** 환경을 기준으로 합니다. 최신 Jetson이나 일반 Ubuntu PC용 설치 프로그램이 아닙니다.
+
+## 실행 전 확인
+
+- 중요한 파일과 직접 수정한 OpenCV 소스를 백업합니다.
+- OpenCV 빌드 전에 스왑을 최소 8GB 준비합니다.
+- 안정적인 전원 공급 장치를 사용하고 OpenCV 빌드에 몇 시간이 걸릴 수 있음을 고려합니다.
+- 스크립트를 `root`로 직접 실행하지 않습니다. 필요한 작업에서만 `sudo`를 호출합니다.
+
+## 1. OpenCV 4.11.0 설치
+
+```bash
+wget https://raw.githubusercontent.com/Lumi-01/Jetson-nano-yolov5-install/main/OpenCV-4.11.0.sh
+chmod +x OpenCV-4.11.0.sh
+./OpenCV-4.11.0.sh
+```
+
+스크립트는 기존의 `Y/n` 질문을 모두 **Yes로 자동 처리**합니다.
+
+- CUDA 호환을 위해 GCC 8 전환이 필요하고 GCC 8이 설치되어 있으면 자동으로 전환합니다.
+- 기존 `~/opencv`, `~/opencv_contrib`, `~/opencv.zip`, `~/opencv_contrib.zip`은 추가 확인 없이 교체됩니다.
+- `sudo` 비밀번호 입력은 보안상 자동화하지 않으며 화면에 나타나면 직접 입력해야 합니다.
+- 오리지널 Nano의 기본 빌드 작업 수는 메모리 부족을 줄이기 위해 2개입니다.
+
+스왑을 충분히 구성했다면 작업 수를 변경할 수 있습니다.
+
+```bash
+OPENCV_BUILD_JOBS=4 ./OpenCV-4.11.0.sh
+```
+
+## 2. OpenBLAS 코어 덤프 방지
+
+```bash
+echo 'export OPENBLAS_CORETYPE=ARMV8' >> ~/.bashrc
+source ~/.bashrc
+```
+
+## 3. YOLOv5 설치
+
+```bash
+wget https://raw.githubusercontent.com/Lumi-01/Jetson-nano-yolov5-install/main/jetson_nano_yolov5_lnstall.sh
+chmod +x jetson_nano_yolov5_lnstall.sh
+./jetson_nano_yolov5_lnstall.sh
+```
+
+YOLOv5 스크립트는 기존 `~/yolov5` 또는 `~/yolov5-py36`을 자동 삭제하지 않습니다. 해당 경로가 이미 있으면 안전하게 중단되므로 내용을 확인한 뒤 직접 이름을 바꾸거나 제거합니다.
+
+## 4. 설치 확인
+
+```bash
+source ~/yolov5-py36/bin/activate
+cd ~/yolov5
+
+# 기본 이미지 테스트
+python detect.py --weights yolov5s.pt --source data/images/bus.jpg
+
+# USB 카메라 테스트
+python detect.py --weights yolov5s.pt --source 0
+
+deactivate
+```
+
+결과는 `~/yolov5/runs/` 아래에 저장됩니다.
+
+## 자동 시뮬레이션 실행
+
+GitHub 저장소의 **Actions → Jetson script simulation → Run workflow**에서 `main` 브랜치를 선택하면 됩니다. 이 검사는 실제 패키지를 설치하지 않고 Bash 문법, 하드웨어 차단, 기존 설치 보호, 버전 고정 및 삭제 경계를 확인합니다.
+
+실제 CUDA 빌드와 카메라 동작은 Jetson Nano에서 별도로 확인해야 합니다.

@@ -27,6 +27,8 @@ The installer defaults to two build jobs on the original Jetson Nano to reduce o
 OPENCV_BUILD_JOBS=4 ./OpenCV-4.11.0.sh
 ```
 
+The OpenCV installer proceeds automatically when it would previously have asked for `Y/n`: it switches to an installed GCC 8 when required and replaces existing `~/opencv`, `~/opencv_contrib`, `~/opencv.zip`, and `~/opencv_contrib.zip` paths. Back up custom source changes first. A `sudo` password prompt, if shown, still requires user input.
+
 ## YOLOv5
 
 Run the automated installer:

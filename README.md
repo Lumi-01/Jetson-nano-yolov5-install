@@ -4,12 +4,15 @@ Install a Jetson Nano-compatible YOLOv5 environment with Python 3.6, PyTorch 1.1
 
 > This project targets the original Jetson Nano running JetPack 4.6.x (Ubuntu 18.04). It is not a general-purpose installer for newer Jetson platforms.
 
+[한국어 가이드](docs/README.ko.md)
+
 ## Before you start
 
 - Back up important files.
 - Make sure at least 8 GB of swap is available before building OpenCV.
 - Use a stable power supply and allow several hours for the OpenCV build.
 - Do not run the scripts as `root`; they request `sudo` only when required.
+- The OpenCV installer automatically answers its continuation prompts with Yes. Existing `~/opencv`, `~/opencv_contrib`, and their ZIP downloads are replaced without another prompt.
 
 ## Quick start
 
@@ -58,6 +61,7 @@ Detection output is written under `~/yolov5/runs/`.
 ## Documentation
 
 - [Detailed installation guide](docs/installation.md)
+- [한국어 가이드](docs/README.ko.md)
 - [Troubleshooting](docs/troubleshooting.md)
 
 ## Automated tests
