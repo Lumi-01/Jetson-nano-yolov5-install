@@ -26,6 +26,10 @@ trap cleanup EXIT
 
 prepare_sudo() {
   command -v sudo >/dev/null 2>&1 || die "sudo is required."
+  if [[ "${JETSON_SUDO_READY:-0}" == "1" ]]; then
+    sudo -n true 2>/dev/null || die "The parent installer did not provide valid sudo authorization."
+    return
+  fi
   printf '%s\n' 'Administrator permission is required. Enter the sudo password once before installation.'
   sudo -v || die "sudo authentication failed."
   (

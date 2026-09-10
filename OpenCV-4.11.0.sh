@@ -16,6 +16,13 @@ prepare_sudo() {
     echo "Error: sudo is required." >&2
     exit 1
   fi
+  if [ "${JETSON_SUDO_READY:-0}" = "1" ]; then
+    sudo -n true 2>/dev/null || {
+      echo "Error: the parent installer did not provide valid sudo authorization." >&2
+      exit 1
+    }
+    return
+  fi
   echo "Administrator permission is required. Enter the sudo password once before installation."
   if ! sudo -v; then
     echo "Error: sudo authentication failed." >&2

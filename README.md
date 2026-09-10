@@ -17,7 +17,21 @@ Install a Jetson Nano-compatible YOLOv5 environment with Python 3.6, PyTorch 1.1
 
 ## Quick start
 
-### 1. Install OpenCV 4.11.0
+### Recommended: complete setup
+
+The unified installer performs the OpenCV, OpenBLAS, and YOLOv5 steps in order, requests the `sudo` password once, records a log, and skips successfully completed stages when rerun.
+
+```bash
+wget https://raw.githubusercontent.com/Lumi-01/Jetson-nano-yolov5-install/main/install-all.sh
+chmod +x install-all.sh
+./install-all.sh
+```
+
+If less than 8GB of swap is configured, the preflight check stops to avoid an unstable OpenCV build. After accepting that risk, use `./install-all.sh --allow-low-swap`.
+
+### Individual installation
+
+#### 1. Install OpenCV 4.11.0
 
 ```bash
 wget https://raw.githubusercontent.com/Lumi-01/Jetson-nano-yolov5-install/main/OpenCV-4.11.0.sh
@@ -25,14 +39,14 @@ chmod +x OpenCV-4.11.0.sh
 ./OpenCV-4.11.0.sh
 ```
 
-### 2. Prevent the OpenBLAS core-dump issue
+#### 2. Prevent the OpenBLAS core-dump issue
 
 ```bash
 echo 'export OPENBLAS_CORETYPE=ARMV8' >> ~/.bashrc
 source ~/.bashrc
 ```
 
-### 3. Install YOLOv5
+#### 3. Install YOLOv5
 
 ```bash
 wget https://raw.githubusercontent.com/Lumi-01/Jetson-nano-yolov5-install/main/jetson_nano_yolov5_lnstall.sh
@@ -73,6 +87,7 @@ GitHub Actions checks every shell script with `bash -n` and safely exercises the
 
 | File | Purpose |
 | --- | --- |
+| `install-all.sh` | Runs the complete OpenCV, OpenBLAS, and YOLOv5 setup |
 | `OpenCV-4.11.0.sh` | Builds CUDA-enabled OpenCV 4.11.0 |
 | `jetson_nano_yolov5_lnstall.sh` | Installs the Python 3.6 YOLOv5 environment |
 | `yolov5 install guide` | Original manual notes retained for reference |
