@@ -78,9 +78,9 @@ install_opencv () {
 	fi
           ARCH=5.3
           PTX="sm_53"
-	  # Default to two jobs on the original Nano to reduce out-of-memory failures.
-	  # Override only after configuring sufficient swap: OPENCV_BUILD_JOBS=4 ./OpenCV-4.11.0.sh
-	  NO_JOB="${OPENCV_BUILD_JOBS:-2}"
+	  # Use all four CPU cores by default. Lower this only if memory pressure remains high.
+	  # Example: OPENCV_BUILD_JOBS=2 ./OpenCV-4.11.0.sh
+	  NO_JOB="${OPENCV_BUILD_JOBS:-4}"
       else
           echo "Unable to determine the Jetson Nano model."
           exit 1

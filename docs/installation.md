@@ -27,7 +27,9 @@ chmod +x install-all.sh
 
 The unified installer runs OpenCV, applies `OPENBLAS_CORETYPE=ARMV8` idempotently, installs YOLOv5, and verifies the Python imports. It stores progress under `~/.local/state/jetson-nano-yolov5-install/` and logs under `~/.local/state/jetson-nano-yolov5-install/logs/`. A successful stage is skipped when the script is rerun. Use `--force` only when you intentionally want to rebuild completed stages.
 
-The preflight check requires at least 8GB of configured swap. `--allow-low-swap` overrides this check but may make the OpenCV build fail or freeze the device.
+If total configured swap is below 8GB, the installer creates a uniquely named temporary swapfile under `/var/tmp` containing only the missing capacity. Existing swap devices and files are never modified. The temporary swap is disabled and removed on normal exit or handled errors, restoring the original configuration. At least 1GB of free storage is retained. If memory pressure prevents `swapoff`, the file remains active and the log prints exact manual recovery commands instead of deleting an active swapfile.
+
+`--allow-low-swap` permits installation to continue only when temporary swap cannot be created. This may make the OpenCV build fail or freeze the device.
 
 ## OpenCV
 
@@ -39,11 +41,13 @@ chmod +x OpenCV-4.11.0.sh
 ./OpenCV-4.11.0.sh
 ```
 
-The installer defaults to two build jobs on the original Jetson Nano to reduce out-of-memory failures. After configuring sufficient swap, you may override it:
+The installer defaults to four OpenCV build jobs so all Jetson Nano CPU cores are used. If memory pressure remains high even with swap, lower the value:
 
 ```bash
-OPENCV_BUILD_JOBS=4 ./OpenCV-4.11.0.sh
+OPENCV_BUILD_JOBS=2 ./OpenCV-4.11.0.sh
 ```
+
+The Torchvision build also defaults to four jobs. Override it with `TORCHVISION_BUILD_JOBS=2` when needed. Both variables are honored by `install-all.sh`.
 
 The OpenCV installer proceeds automatically when it would previously have asked for `Y/n`: it switches to an installed GCC 8 when required and replaces existing `~/opencv`, `~/opencv_contrib`, `~/opencv.zip`, and `~/opencv_contrib.zip` paths. Back up custom source changes first. The single initial `sudo` password prompt still requires user input.
 

@@ -14,12 +14,13 @@ Install a Jetson Nano-compatible YOLOv5 environment with Python 3.6, PyTorch 1.1
 - Do not run the scripts as `root`; they request `sudo` only when required.
 - The OpenCV installer automatically answers its continuation prompts with Yes. Existing `~/opencv`, `~/opencv_contrib`, and their ZIP downloads are replaced without another prompt.
 - After the safety checks, each installer asks for the `sudo` password once with `sudo -v` and keeps that authorization alive during the long-running build. Passwords are never stored.
+- OpenCV and Torchvision use all four Jetson Nano CPU cores by default. Their job counts can be lowered independently if memory pressure remains high.
 
 ## Quick start
 
 ### Recommended: complete setup
 
-The unified installer performs the OpenCV, OpenBLAS, and YOLOv5 steps in order, requests the `sudo` password once, records a log, and skips successfully completed stages when rerun.
+The unified installer performs the OpenCV, OpenBLAS, and YOLOv5 steps in order, requests the `sudo` password once, records a log, and skips successfully completed stages when rerun. If configured swap is below 8GB, it temporarily adds only the missing amount and restores the original swap configuration on exit.
 
 ```bash
 wget https://raw.githubusercontent.com/Lumi-01/Jetson-nano-yolov5-install/main/install-all.sh
@@ -27,7 +28,7 @@ chmod +x install-all.sh
 ./install-all.sh
 ```
 
-If less than 8GB of swap is configured, the preflight check stops to avoid an unstable OpenCV build. After accepting that risk, use `./install-all.sh --allow-low-swap`.
+Temporary swap creation retains at least 1GB of free storage. If there is not enough space or swap setup fails, the installer stops safely. After accepting the low-swap risk, use `./install-all.sh --allow-low-swap`.
 
 ### Individual installation
 
@@ -81,7 +82,7 @@ Detection output is written under `~/yolov5/runs/`.
 
 ## Automated tests
 
-GitHub Actions checks every shell script with `bash -n` and safely exercises the hardware and existing-installation guards on an Ubuntu runner. It also verifies the pinned versions, temporary-directory cleanup, explicit OpenCV cleanup targets, and the original Nano's conservative build-job default. Use **Actions → Jetson script simulation → Run workflow** to run it manually.
+GitHub Actions checks every shell script with `bash -n` and safely exercises the hardware and existing-installation guards on an Ubuntu runner. It also verifies the pinned versions, temporary-directory and swap cleanup, explicit OpenCV cleanup targets, and four-core build defaults. Use **Actions → Jetson script simulation → Run workflow** to run it manually.
 
 ## Included files
 
