@@ -2,7 +2,7 @@
 
 Install a Jetson Nano-compatible YOLOv5 environment with Python 3.6, PyTorch 1.10.0, Torchvision 0.11.1, and CUDA-enabled OpenCV.
 
-> This project targets the original Jetson Nano running JetPack 4.6.x (Ubuntu 18.04). It is not a general-purpose installer for newer Jetson platforms. yes
+> This project targets the original Jetson Nano running JetPack 4.6.x (Ubuntu 18.04). It is not a general-purpose installer for newer Jetson platforms. 
 
 [한국어 가이드](docs/README.ko.md)
 
