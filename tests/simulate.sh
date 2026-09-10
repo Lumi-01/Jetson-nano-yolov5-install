@@ -4,6 +4,7 @@ set -Eeuo pipefail
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 YOLO_SCRIPT="$REPO_ROOT/jetson_nano_yolov5_lnstall.sh"
 OPENCV_SCRIPT="$REPO_ROOT/OpenCV-4.11.0.sh"
+ALL_SCRIPT="$REPO_ROOT/install-all.sh"
 TEST_ROOT="$(mktemp -d "${TMPDIR:-/tmp}/jetson-script-test.XXXXXX")"
 trap 'rm -rf -- "$TEST_ROOT"' EXIT
 
@@ -33,8 +34,11 @@ while IFS= read -r -d '' script; do
 done < <(find "$REPO_ROOT" -maxdepth 1 -type f -name '*.sh' -print0)
 
 printf '%s\n' 'Checking the non-Jetson hardware guards...'
+"$ALL_SCRIPT" --help >/dev/null
 expect_failure 'This installer requires an aarch64 Jetson system.' \
   env HOME="$TEST_ROOT/home-x86" bash "$YOLO_SCRIPT"
+expect_failure 'requires an aarch64 Jetson system' \
+  env HOME="$TEST_ROOT/home-all" bash "$ALL_SCRIPT"
 expect_failure '/proc/device-tree/model not found' \
   env HOME="$TEST_ROOT/home-opencv" bash "$OPENCV_SCRIPT"
 
@@ -69,7 +73,14 @@ grep -F -- 'NO_JOB="${OPENCV_BUILD_JOBS:-2}"' "$OPENCV_SCRIPT" >/dev/null
 grep -F -- 'Automatic confirmation enabled' "$OPENCV_SCRIPT" >/dev/null
 grep -F -- 'sudo -v' "$OPENCV_SCRIPT" >/dev/null
 grep -F -- 'sudo -n true' "$OPENCV_SCRIPT" >/dev/null
-if grep -F -- 'sudo -S' "$YOLO_SCRIPT" "$OPENCV_SCRIPT" >/dev/null; then
+grep -F -- 'OpenCV-4.11.0.sh' "$ALL_SCRIPT" >/dev/null
+grep -F -- 'jetson_nano_yolov5_lnstall.sh' "$ALL_SCRIPT" >/dev/null
+grep -F -- 'OPENBLAS_CORETYPE=ARMV8' "$ALL_SCRIPT" >/dev/null
+grep -F -- 'opencv.done' "$ALL_SCRIPT" >/dev/null
+grep -F -- 'yolov5.done' "$ALL_SCRIPT" >/dev/null
+grep -F -- 'sudo -v' "$ALL_SCRIPT" >/dev/null
+grep -F -- 'sudo -n true' "$ALL_SCRIPT" >/dev/null
+if grep -F -- 'sudo -S' "$YOLO_SCRIPT" "$OPENCV_SCRIPT" "$ALL_SCRIPT" >/dev/null; then
   printf '%s\n' 'A script attempts to read a sudo password from standard input.' >&2
   exit 1
 fi

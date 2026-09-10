@@ -15,6 +15,20 @@ These versions are intentionally pinned because current releases no longer suppo
 
 Each installer performs its hardware and existing-path checks first, then runs `sudo -v` before making changes. Enter the `sudo` password once at that point. A background keepalive refreshes the sudo timestamp during long builds and is stopped automatically when the script exits. The password is not stored or passed through command-line arguments.
 
+## Unified installation
+
+For a complete setup, run:
+
+```bash
+wget https://raw.githubusercontent.com/Lumi-01/Jetson-nano-yolov5-install/main/install-all.sh
+chmod +x install-all.sh
+./install-all.sh
+```
+
+The unified installer runs OpenCV, applies `OPENBLAS_CORETYPE=ARMV8` idempotently, installs YOLOv5, and verifies the Python imports. It stores progress under `~/.local/state/jetson-nano-yolov5-install/` and logs under `~/.local/state/jetson-nano-yolov5-install/logs/`. A successful stage is skipped when the script is rerun. Use `--force` only when you intentionally want to rebuild completed stages.
+
+The preflight check requires at least 8GB of configured swap. `--allow-low-swap` overrides this check but may make the OpenCV build fail or freeze the device.
+
 ## OpenCV
 
 Set up at least 8 GB of swap, then run:

@@ -9,9 +9,25 @@
 - 안정적인 전원 공급 장치를 사용하고 OpenCV 빌드에 몇 시간이 걸릴 수 있음을 고려합니다.
 - 스크립트를 `root`로 직접 실행하지 않습니다. 필요한 작업에서만 `sudo`를 호출합니다.
 
-두 설치 스크립트 모두 하드웨어와 기존 설치 경로를 먼저 확인한 뒤, 실제 작업 직전에 `sudo -v`로 비밀번호를 **한 번만** 요청합니다. 긴 빌드 중에는 백그라운드에서 인증 유효시간만 갱신하며 스크립트가 끝나면 갱신 프로세스도 종료합니다. 비밀번호를 파일이나 명령행에 저장하지 않습니다.
+각 설치 스크립트는 하드웨어와 기존 설치 경로를 먼저 확인한 뒤, 실제 작업 직전에 `sudo -v`로 비밀번호를 **한 번만** 요청합니다. 긴 빌드 중에는 백그라운드에서 인증 유효시간만 갱신하며 스크립트가 끝나면 갱신 프로세스도 종료합니다. 비밀번호를 파일이나 명령행에 저장하지 않습니다.
 
-## 1. OpenCV 4.11.0 설치
+## 설치
+
+### 권장: 전체 통합 설치
+
+다음 스크립트 하나로 OpenCV, OpenBLAS 설정, YOLOv5 설치 및 import 검증을 순서대로 실행할 수 있습니다.
+
+```bash
+wget https://raw.githubusercontent.com/Lumi-01/Jetson-nano-yolov5-install/main/install-all.sh
+chmod +x install-all.sh
+./install-all.sh
+```
+
+진행 상태와 로그는 `~/.local/state/jetson-nano-yolov5-install/`에 저장됩니다. 성공한 단계는 재실행할 때 건너뜁니다. 완료된 단계까지 다시 빌드하려는 경우에만 `--force`를 사용합니다.
+
+스왑이 8GB 미만이면 OpenCV 빌드 중 멈춤을 방지하기 위해 사전 검사에서 중단됩니다. 위험을 감수하고 계속하려면 `./install-all.sh --allow-low-swap`을 사용합니다.
+
+### 개별 OpenCV 설치
 
 ```bash
 wget https://raw.githubusercontent.com/Lumi-01/Jetson-nano-yolov5-install/main/OpenCV-4.11.0.sh
